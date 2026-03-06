@@ -1,0 +1,57 @@
+# Python 项目常用 .gitignore
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+.pytest_cache/
+
+# C extensions
+*.so
+*.pyd
+
+# Virtual environments
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# VS Code / IDEs
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# mypy / type checkers
+.mypy_cache/
+.dmypy.json
+.pyre/
+
+# Unit test / reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+
+# Django / Flask / databases / uploads
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+/media/
+instance/
+
+# Environment files with secrets
+.env
+.env.*
+secrets.yml
+
+# Temporary / swap
+*.tmp
+*.temp
+
+# Hidden metadata
+*.log.*
