@@ -17,9 +17,6 @@ def main():
 
         while True:
             ret, frame = cam.read_frame()
-            if not ret:
-                print("错误：无法读取帧")
-                break
             cv2.imshow('摄像头实时画面', frame)
             current_time = f"{time.time() - start_time:.3f}"
             evaluate_point = f"{evaluate_clarity(frame):.3f}"
