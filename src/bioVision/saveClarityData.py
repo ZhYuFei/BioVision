@@ -1,11 +1,14 @@
 import cv2
 import time
 import csv
+from common import setup_logger
 from cameraControl import Camera
 from imgAnalysis import evaluate_clarity
 
 def main():
-    cam = Camera()
+    logger = setup_logger(filename="SaveClarityData", with_console=True)
+
+    cam = Camera(logger=logger)
     
     while not cam.open():
         time.sleep(1)
@@ -21,10 +24,12 @@ def main():
             current_time = f"{time.time() - start_time:.3f}"
             evaluate_point = f"{evaluate_clarity(frame):.3f}"
             csv_writer.writerow([current_time, evaluate_point])
-            print(f"当前帧清晰度分数: {evaluate_point}")
+            logger.info(f"当前帧清晰度分数: {evaluate_point}")
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
-
+    cam.release()
+    cv2.destroyAllWindows()
+    logger.info("程序已结束，摄像头已释放。")
 
 if __name__ == '__main__':
     main()

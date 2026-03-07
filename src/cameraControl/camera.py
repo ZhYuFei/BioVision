@@ -28,6 +28,7 @@ class Camera:
         else:
             if self.logger:
                 self.logger.warning("配置文件 config.ini 未找到，使用默认摄像头参数")
+        self.logger.debug(f"摄像头参数 - 焦距: {self.focus}, 变焦: {self.zoom}, 翻转模式: {self.flip_mode}")
 
     def open(self) -> bool:
         """打开摄像头。
@@ -40,9 +41,14 @@ class Camera:
                 self.logger.error("无法打开摄像头")
             return False
         
-        self.cap.set(cv2.CAP_PROP_FOCUS, self.focus)
-        self.cap.set(cv2.CAP_PROP_ZOOM, self.zoom)
-
+        if self.cap.set(cv2.CAP_PROP_FOCUS, self.focus):
+            self.logger.debug(f"设置焦距成功: {self.focus}")
+        else:
+            self.logger.warning("无法设置焦距，可能不支持该功能")
+        if self.cap.set(cv2.CAP_PROP_ZOOM, self.zoom):
+            self.logger.debug(f"设置变焦成功: {self.zoom}")
+        else:
+            self.logger.warning("无法设置变焦，可能不支持该功能")
 
         return True
     
@@ -54,7 +60,8 @@ class Camera:
         if self.cap is None:
             raise RuntimeError("摄像头未打开，请先调用 open()")
         self.focus = focus
-        self.cap.set(cv2.CAP_PROP_FOCUS, self.focus)
+        if not self.cap.set(cv2.CAP_PROP_FOCUS, self.focus):
+            self.logger.warning("无法设置焦距，可能不支持该功能")
     
     def set_zoom(self, zoom: float):
         """设置摄像头变焦。
@@ -64,7 +71,8 @@ class Camera:
         if self.cap is None:
             raise RuntimeError("摄像头未打开，请先调用 open()")
         self.zoom = zoom
-        self.cap.set(cv2.CAP_PROP_ZOOM, self.zoom)
+        if not self.cap.set(cv2.CAP_PROP_ZOOM, self.zoom):
+            self.logger.warning("无法设置变焦，可能不支持该功能")
 
     def read_frame(self):
         """读取一帧图像。
