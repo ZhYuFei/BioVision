@@ -1,16 +1,19 @@
 import cv2
+import logging
 import configparser
 
 class Camera:
     """摄像头封装类，提供打开、读取和显示图像功能"""
 
-    def __init__(self, index: int = 0):
+    def __init__(self, index: int = 0, logger: logging.Logger = None):
         """初始化摄像头对象。
         Args:
             index: 摄像头索引，默认 0 表示默认摄像头。
+            logger: 日志记录器。
         """
         self.index = index
         self.cap = None
+        self.logger = logger
 
         self.focus = 0.0
         self.zoom = 1.0
@@ -23,10 +26,8 @@ class Camera:
             self.zoom = config.getfloat('camera', 'zoom', fallback=self.zoom)
             self.flip_mode = config.getint('camera', 'flip_mode', fallback=self.flip_mode)
         else:
-            print("警告：配置文件 config.ini 未找到，使用默认摄像头参数")
-        print(f"摄像头参数 - 焦距: {self.focus}, 变焦: {self.zoom}, 翻转模式: {self.flip_mode}")
-
-        
+            if self.logger:
+                self.logger.warning("配置文件 config.ini 未找到，使用默认摄像头参数")
 
     def open(self) -> bool:
         """打开摄像头。
@@ -35,7 +36,8 @@ class Camera:
         """
         self.cap = cv2.VideoCapture(self.index)
         if not self.cap.isOpened():
-            print("错误：无法打开摄像头")
+            if self.logger:
+                self.logger.error("无法打开摄像头")
             return False
         
         self.cap.set(cv2.CAP_PROP_FOCUS, self.focus)
