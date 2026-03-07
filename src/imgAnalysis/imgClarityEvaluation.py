@@ -15,3 +15,15 @@ def evaluate_clarity(image):
     clarity_score = laplacian.var()
     
     return clarity_score
+
+def roi_clarity_evaluation(image, roi):
+    """
+    评估图像中指定区域（ROI）的清晰度，返回一个清晰度分数。
+    ROI应该是一个包含四个元素的元组 (x, y, width, height)。
+    """
+    x, y, width, height = roi
+    # 提取ROI区域
+    roi_image = image[y:y+height, x:x+width]
+    
+    # 评估ROI区域的清晰度
+    return evaluate_clarity(roi_image)
