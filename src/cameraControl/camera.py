@@ -41,6 +41,8 @@ class Camera:
                 self.logger.error("无法打开摄像头")
             return False
         
+        self.cap.set(cv2.CAP_PROP_AUTOFOCUS,0) # 关闭自动对焦
+        
         if self.cap.set(cv2.CAP_PROP_FOCUS, self.focus):
             self.logger.debug(f"设置焦距成功: {self.focus}")
         else:
@@ -102,17 +104,24 @@ class Camera:
             self.cap = None
 
 if __name__ == '__main__':
-    cam = Camera()
+    logger = logging.getLogger("CameraTest")
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logging.StreamHandler())
+    logger.info("日志初始化完成...")
+    cam = Camera(logger=logger)
+    logger.info("相机对象创建成功...")
     if not cam.open():
-        print("无法打开摄像头，程序退出")
+        logger.error("无法打开摄像头，程序退出")
         exit()
+    logger.info("摄像头打开成功...")
     while True:
         ret, frame = cam.read_frame()
         if not ret:
-            print("错误：无法读取帧")
+            logger.error("错误：无法读取帧")
             break
         cv2.imshow('Real-time image', frame)
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
     cam.release()
     cv2.destroyAllWindows()
+    logger.info("程序已结束，摄像头已释放。")

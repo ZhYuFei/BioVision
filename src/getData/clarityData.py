@@ -6,6 +6,9 @@ from cameraControl import Camera
 from imgAnalysis import evaluate_clarity
 
 def main():
+    '''
+    该函数实现了摄像头实时画面清晰度分数的评估和记录。
+    '''
     logger = setup_logger(filename="SaveClarityData", with_console=True)
 
     cam = Camera(logger=logger)
