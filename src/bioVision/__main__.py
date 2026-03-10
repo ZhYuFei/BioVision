@@ -3,6 +3,7 @@ import time
 from common import setup_logger
 from cameraControl import Camera
 from imgAnalysis import evaluate_clarity
+from dataAnalysis import PeakFinder
 
 def main():
     # 设置日志记录器

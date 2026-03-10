@@ -1,13 +1,12 @@
 import time
 import configparser
-from typing import Optional, Tuple, List
+from typing import Tuple
 import numpy as np
 
 class PeakFinder:
     def __init__(self, config: configparser.ConfigParser):
         """
         峰值查找器
-        
         Args:
             config: 配置解析器
         """
@@ -27,6 +26,15 @@ class PeakFinder:
         
         # 算法参数
         self.phi = (np.sqrt(5) - 1) / 2  # 黄金分割比例 ≈ 0.618
+
+    def reset(self):
+        """重置搜索状态"""
+        self.queried_points.clear()
+        self.query_count = 0
+        self.start_time = None
+        self.search_complete = False
+        self.peak_x = -1
+        self.peak_y = float('-inf')
         
     def request_next_x(self) -> int:
         """
